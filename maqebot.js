@@ -38,21 +38,13 @@ for (i = 0; i < command.length; i++) {
   const c = command[i].toUpperCase();
 
   if (c === "R" || c === "L") {
-    if (distance.length > 0) {
-      const totalDistance = calculateDistance(distance);
-      const { axis, factor } = FORMULAR[robot.direction];
-      robot[axis] += totalDistance * factor;
-    }
+    updateRobotAxis();
 
     const newDirection = FORMULAR[robot.direction][c];
     robot.direction = newDirection;
     distance = [];
   } else if (c === "W") {
-    if (distance.length > 0) {
-      const totalDistance = calculateDistance(distance);
-      const { axis, factor } = FORMULAR[robot.direction];
-      robot[axis] += totalDistance * factor;
-    }
+    updateRobotAxis();
 
     distance = [];
   } else if (/\d/.test(c) && i) {
@@ -60,11 +52,16 @@ for (i = 0; i < command.length; i++) {
     const isLatestCommand = i === command.length - 1;
 
     if (isLatestCommand) {
-      const totalDistance = calculateDistance(distance);
-      const { axis, factor } = FORMULAR[robot.direction];
-
-      robot[axis] += totalDistance * factor;
+      updateRobotAxis();
     }
+  }
+}
+
+function updateRobotAxis() {
+  if (distance.length > 0) {
+    const totalDistance = calculateDistance(distance);
+    const { axis, factor } = FORMULAR[robot.direction];
+    robot[axis] += totalDistance * factor;
   }
 }
 
